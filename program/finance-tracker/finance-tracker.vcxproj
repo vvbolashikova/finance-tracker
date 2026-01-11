@@ -128,7 +128,9 @@
     <ClCompile Include="stringlib.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="colors.h" />
     <ClInclude Include="command-processor.h" />
+    <ClInclude Include="global.h" />
     <ClInclude Include="stringlib.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

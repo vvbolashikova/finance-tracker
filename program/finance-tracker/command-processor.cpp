@@ -1,5 +1,6 @@
 #include <iostream>
 #include "stringlib.h"
+#include "global.h"
 
 using std::cout;
 using std::cin;
@@ -12,22 +13,19 @@ using std::endl;
 
 bool isValidSortArg(char* arg)
 {
-    return true;
+    return arg == "income" || arg == "expense" || arg == "balance";
 }
 
 bool isValidMonthNumber(char* arg)
 {
-    return toInteger(arg) >= 1 and toInteger(arg) <= 12;
+    if (isInteger(arg))
+        return toInteger(arg) >= 1 and toInteger(arg) <= 12;
+    return false;
 }
 
-bool isValidForecastArg(char* arg, int len)
+bool isValidForecastArg(char* arg)
 {
-    for (int i = 0; i < len; i++)
-    {
-        if (!isDigit(arg[i]))
-            return false;
-    }
-    return true;
+    return isInteger(arg);
 }
 
 void setup()
@@ -42,6 +40,7 @@ void setup()
 
     if (isValidMonthNumber(arg))
     {
+        setupMonths = toInteger(arg);
         cout << "Profile created successfully.";
     }
 }
@@ -50,8 +49,16 @@ void add()
 {
     cout << "Enter month (1-12): ";
 
-    int month;
-    cin >> month;
+    char input[10];
+    cin.getline(input, 10);
+
+    char* month = input;
+    trim(&month, ' ');
+
+    if (isValidMonthNumber(month))
+    {
+        // months[toInteger(month) - 1];
+    }
 
     int income;
     cout << "Enter income: ";
@@ -81,9 +88,11 @@ void sort(char* arg)
 void forecast(char* arg)
 {
     int monthsAhead = toInteger(arg);
+    // Month::forecastNMonthsAhead()
+
 }
 
-bool identifyCommand(char* command)
+bool executeCommand(char* command)
 {
     if (command == "setup")
     {
@@ -113,6 +122,7 @@ bool identifyCommand(char* command)
     {
         int len = strlen(command);
         char* arg = substring(command, SEARCH_ARG_INDEX, len);
+        trim(&arg, ' ');
 
         if (isValidMonthNumber(arg))
         {
@@ -125,6 +135,7 @@ bool identifyCommand(char* command)
     {
         int len = strlen(command);
         char* arg = substring(command, SORT_ARG_INDEX, len);
+        trim(&arg, ' ');
 
         if (isValidSortArg(arg))
         {
@@ -137,8 +148,9 @@ bool identifyCommand(char* command)
     {
         int len = strlen(command);
         char* arg = substring(command, FORECAST_ARG_INDEX, len);
+        trim(&arg, ' ');
 
-        if (isValidForecastArg(arg, len - FORECAST_ARG_INDEX))
+        if (isValidForecastArg(arg))
         {
             forecast(arg);
             return true;

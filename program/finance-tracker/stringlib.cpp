@@ -2,7 +2,6 @@
 
 #define ASCII_CASE_DIFF 'a' - 'A'
 
-
 using std::cout;
 using std::cin;
 using std::endl;
@@ -23,13 +22,13 @@ void trim(char** arg, char c)
     char* p = *arg;
 
     while (*p++);
-    p--;
+        p--;
 
     while (c == *--p)
         *p = 0;
 
     while (c == *(*arg)++);
-    (*arg)--;
+        (*arg)--;
 }
 
 bool stringStartsWith(const char* str, const char* substr)
@@ -83,6 +82,19 @@ char* substring(char* str, int startIndex, int len)
     return substr;
 }
 
+bool isInteger(char* str)
+{
+    int len = strlen(str);
+
+    for (int i = 0; i < len; i++)
+    {
+        if (!isDigit(str[len]))
+            return false;
+    }
+
+    return true;
+}
+
 int toInteger(char* str)
 {
     int num = 0;
@@ -97,7 +109,31 @@ int toInteger(char* str)
     return num;
 }
 
-float toDouble(char* str)
+bool isDouble(char* str)
+{
+    int len = strlen(str);
+    bool metPoint = false;
+
+    for (int i = 0; i < len; i++)
+    {
+        if (str[i] == '.' && !metPoint)
+        {
+            metPoint = true;
+            continue;
+        }
+        if (str[i] == '.' && metPoint)
+        {
+            return false;
+        }
+        if (!isDigit(str[i]) && str[i] != '.')
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+double toDouble(char* str)
 {
     int len = strlen(str);
 
@@ -111,7 +147,6 @@ float toDouble(char* str)
         if (isDigit(str[i]) && !metPoint)
         {
             result = result * 10 + (str[i] - '0');
-
         }
 
         if (isDigit(str[i]) && metPoint)
@@ -125,7 +160,6 @@ float toDouble(char* str)
 
         if (!isDigit(str[i]) && str[i] != '.')
             break;
-
     }
     return result;
 }
