@@ -6,10 +6,12 @@ using std::endl;
 
 struct Month {
     short number;
+    char* name;
     double income, expense;
 
     Month()
     {
+        name = nullptr;
         number = 0;
         income = 0;
         expense = 0;
