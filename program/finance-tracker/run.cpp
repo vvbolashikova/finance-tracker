@@ -1,3 +1,18 @@
+/**
+*
+* Solution to course project # 3
+* Introduction to programming course
+* Faculty of Mathematics and Informatics of Sofia University
+* Winter semester 2025/2026
+*
+* @author Victoria Bolashikova
+* @idnumber 6MI0600688
+* @compiler VC
+*
+* main program loop
+*
+*/
+
 #include <iostream>
 #include "stringlib.h"
 #include "command-processor.h"
@@ -8,7 +23,7 @@ using std::cin;
 using std::cout;
 using std::endl;
 
-int main()
+void runProgram()
 {
     Month* months = nullptr;
 
@@ -21,7 +36,7 @@ int main()
     cin.getline(input, 1024);
 
     bool isSetup = false;
-    
+
     while (compareStrings(input, "exit") != 0)
     {
         toLower(input);

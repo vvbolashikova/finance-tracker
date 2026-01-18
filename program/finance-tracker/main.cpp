@@ -9,20 +9,14 @@
 * @idnumber 6MI0600688
 * @compiler VC
 *
-* header for the Month struct
+* main file
 *
 */
 
-#pragma once
+#include "run.h"
 
-struct Month {
-    short number;
-    double income, expense;
-
-    Month()
-    {
-        number = 0;
-        income = 0;
-        expense = 0;
-    }
-};
+int main()
+{
+    runProgram();
+    return 0;
+}

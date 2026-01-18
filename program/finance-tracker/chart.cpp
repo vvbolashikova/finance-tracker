@@ -1,8 +1,26 @@
+/**
+*
+* Solution to course project # 3
+* Introduction to programming course
+* Faculty of Mathematics and Informatics of Sofia University
+* Winter semester 2025/2026
+*
+* @author Victoria Bolashikova
+* @idnumber 6MI0600688
+* @compiler VC
+*
+* chart visualization functions
+*
+*/
+
+#include <iostream>
 #include <iomanip>
 #include "global.h"
 #include "stringlib.h"
 
 using std::setw;
+using std::endl;
+using std::cout;
 
 #define MIN_ROWS 4
 #define MAX_ROWS 10
@@ -101,5 +119,5 @@ void displayIncomeChart(Month* months, int& monthsAdded)
         cout << shortMonthNames[i] << "  ";
     }
 
-    cout << endl;
+    cout << endl << endl;
 }

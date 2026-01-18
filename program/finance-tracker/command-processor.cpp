@@ -1,3 +1,18 @@
+/**
+*
+* Solution to course project # 3
+* Introduction to programming course
+* Faculty of Mathematics and Informatics of Sofia University
+* Winter semester 2025/2026
+*
+* @author Victoria Bolashikova
+* @idnumber 6MI0600688
+* @compiler VC
+*
+* user command processing functions
+*
+*/
+
 #include <iostream>
 #include "stringlib.h"
 #include "global.h"
@@ -5,6 +20,7 @@
 #include "colors.h"
 #include "sort.h"
 #include "chart.h"
+#include "report.h"
 
 using std::cout;
 using std::cin;

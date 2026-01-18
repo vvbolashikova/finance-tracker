@@ -125,8 +125,10 @@
   <ItemGroup>
     <ClCompile Include="chart.cpp" />
     <ClCompile Include="command-processor.cpp" />
-    <ClCompile Include="finance-tracker.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="months.cpp" />
+    <ClCompile Include="report.cpp" />
+    <ClCompile Include="run.cpp" />
     <ClCompile Include="sort.cpp" />
     <ClCompile Include="stringlib.cpp" />
   </ItemGroup>
@@ -136,6 +138,8 @@
     <ClInclude Include="command-processor.h" />
     <ClInclude Include="global.h" />
     <ClInclude Include="months.h" />
+    <ClInclude Include="report.h" />
+    <ClInclude Include="run.h" />
     <ClInclude Include="sort.h" />
     <ClInclude Include="stringlib.h" />
   </ItemGroup>
