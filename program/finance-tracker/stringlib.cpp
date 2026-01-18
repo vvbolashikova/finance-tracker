@@ -17,18 +17,34 @@ double pow(double base, int power)
     return result;
 }
 
-void trim(char** arg, char c)
+void trim(char** str, char c)
 {
-    char* p = *arg;
+    if (!str || !*str) return;
 
-    while (*p++);
-        p--;
+    char* s = *str;
 
-    while (c == *--p)
-        *p = 0;
+    while (*s == c)
+        s++;
 
-    while (c == *(*arg)++);
-        (*arg)--;
+    if (*s == '\0')
+    {
+        *str = s;
+        return;
+    }
+
+    char* end = s;
+    while (*end != '\0')
+        end++;
+
+    end--;
+
+    while (end > s && *end == c)
+    {
+        *end = '\0';
+        end--;
+    }
+
+    *str = s;
 }
 
 bool stringStartsWith(const char* str, const char* substr)
@@ -42,6 +58,17 @@ bool stringStartsWith(const char* str, const char* substr)
     }
 
     return true;
+}
+
+int my_strcmp(const char* s1, const char* s2) 
+{
+    while (*s1 && (*s1 == *s2)) 
+    {
+        s1++;
+        s2++;
+    }
+
+    return (unsigned char)*s1 - (unsigned char)*s2;
 }
 
 char* toLower(char* str)
@@ -58,7 +85,7 @@ char* toLower(char* str)
 
 bool isDigit(char symbol)
 {
-    return symbol >= '0' and symbol <= '9';
+    return (symbol >= '0' && symbol <= '9');
 }
 
 int strlen(char* str)
@@ -88,8 +115,10 @@ bool isInteger(char* str)
 
     for (int i = 0; i < len; i++)
     {
-        if (!isDigit(str[len]))
+        if (!isDigit(str[i]))
+        {
             return false;
+        }   
     }
 
     return true;

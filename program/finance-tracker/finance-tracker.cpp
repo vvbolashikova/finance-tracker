@@ -10,42 +10,49 @@ using std::endl;
 
 int main()
 {
-    char input[1024];
+    Month* months = nullptr;
+
+    int setupMonths = 0;
+    int monthsAdded = 0;
 
     cout << " >> ";
+
+    char input[1024];
     cin.getline(input, 1024);
 
     bool isSetup = false;
     
-    while (input != "exit")
+    while (strcmp(input, "exit") != 0)
     {
-        char* command = toLower(input);
+        toLower(input);
+
+        char* command = input;
+
+        bool isCommandSetup = !(strcmp(command, "setup"));
 
         trim(&command, ' ');
 
-        if (command == "setup" && isSetup)
+        if (isCommandSetup && isSetup)
         {
-            cout << RED << "Session already set up" << RESET << endl;
+            cout << RED << " Session already set up" << RESET << endl;
+        }
+        else if (!isCommandSetup && !isSetup)
+        {
+            cout << RED << " Set up session first" << RESET << endl;
+        }
+        else if (!executeCommand(command, months, setupMonths, monthsAdded))
+        {
+            cout << RED << " No such command" << RESET << endl;
         }
 
-        if (!isSetup and command != "setup")
+        if (isCommandSetup)
         {
-            cout << RED << "Set up session first!" << RESET << endl;
-            continue;
-        }
-
-        if (!executeCommand(command))
-        {
-            cout << RED << "No such command" << RESET << endl;
-        }
-
-        if (command == "setup")
-        {
+            delete[] months;
             months = new Month[setupMonths];
             isSetup = true;
         }
 
-        cout << endl << " >> ";
+        cout << " >> ";
         cin.getline(input, 1024);
     }
 }

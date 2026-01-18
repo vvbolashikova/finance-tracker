@@ -8,4 +8,4 @@ bool isDigit(char symbol);
 bool isInteger(char* str);
 int toInteger(char* str);
 bool isDouble(char* str);
-float toDouble(char* str);
+double toDouble(char* str);
