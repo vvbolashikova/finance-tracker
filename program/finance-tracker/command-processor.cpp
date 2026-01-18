@@ -43,13 +43,6 @@ bool isValidMonthName(char* arg)
     return false;
 }
 
-bool isValidSortArg(char* arg)
-{
-    return compareStrings(arg, "income") == 0 ||
-        compareStrings(arg, "expense") == 0 ||
-        compareStrings(arg, "balance") == 0;
-}
-
 bool isValidMonthNumber(char* arg)
 {
     if (!isInteger(arg))
@@ -267,7 +260,6 @@ void forecast(char* command, Month* months, int &monthsAdded)
     else
     {
         displayInvalidArgMessage("forecast");
-        cout << "forecast <monthsAhead>" << endl;
     }
     delete[] arg;
 }
@@ -293,15 +285,24 @@ void search(char* command, Month* months, int& monthsAdded)
     }
 }
 
-void sort(char* command)
+void sort(char* command, Month* months, int& monthsAdded)
 {
     int len = strlen(command);
     char* arg = substring(command, SORT_ARG_INDEX, len);
     trim(&arg, ' ');
+    toLower(arg);
 
-    if (isValidSortArg(arg))
+    if (compareStrings(arg, "income") == 0)
     {
-        sort(arg);
+        sortByIncomeDesc(months, monthsAdded);
+    }
+    else if (compareStrings(arg, "expense") == 0)
+    {
+        sortByExpenseDesc(months, monthsAdded);
+    }
+    else if ((compareStrings(arg, "balance") == 0))
+    {
+        sortByBalanceDesc(months, monthsAdded);
     }
     else
     {
@@ -340,7 +341,7 @@ bool executeCommand(char* command, Month* months, int& setupMonths, int& monthsA
     }
     else if (stringStartsWith(command, "sort "))
     {
-        sort(command);
+        sort(command, months, monthsAdded);
         return true;
     }
     else if (stringStartsWith(command, "forecast "))

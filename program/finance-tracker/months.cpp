@@ -1,14 +1,25 @@
 #include <iostream>
+#include <iomanip>
 #include "global.h"
 #include "colors.h"
 
 using std::endl;
 using std::cout;
+using std::setw;
+using std::setprecision;
+using std::right;
+using std::left;
 
-void spaces(int n)
+
+const char* shortMonthNames[12] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+#define MONTH_W 6
+#define MONEY_W 12
+
+void printChars(char c, int n)
 {
     for (int i = 0; i < n; i++)
-        cout << " ";
+        cout << c;
 }
 
 double getBalance(Month month)
@@ -79,9 +90,54 @@ double getAverageBalance(Month* months, int& monthsAdded)
     return (balance / monthsAdded);
 }
 
+void printTableHeader()
+{
+    cout << " ";
+
+    cout << left
+        << setw(MONTH_W) << "Month" << " | "
+        << right
+        << setw(MONEY_W) << "Income" << " | "
+        << setw(MONEY_W) << "Expense" << " | "
+        << setw(MONEY_W) << "Balance"
+        << endl;
+}
+
+void printTableRows(Month* months, int& monthsAdded)
+{
+    for (int i = 0; i < monthsAdded; i++)
+    {
+        double balance = getBalance(months[i]);
+
+        cout << " ";
+        cout << left
+            << setw(MONTH_W) << shortMonthNames[i] << " | "
+            << right
+            << setw(MONEY_W) << months[i].income << " | "
+            << setw(MONEY_W) << months[i].expense << " | ";
+
+        if (balance >= 0)
+            cout << '+';
+
+        cout << setw(MONEY_W - 1) << balance << endl;
+    }
+
+    cout << " ";
+    printChars('-', MONTH_W + 3 + MONEY_W * 3 + 6);
+    cout << endl;
+}
+
 void displayMonthsTable(Month* months, int& monthsAdded)
 {
-    /* add table */
+    cout << std::fixed << std::setprecision(2);
+
+    printTableHeader();
+
+    cout << " ";
+    printChars('-', MONTH_W + 3 + MONEY_W * 3 + 6);
+    cout << endl;
+
+    printTableRows(months, monthsAdded);
 
     cout << " Total Income: " << getTotalIncome(months, monthsAdded) << endl;
     cout << " Total Expense: " << getTotalExpense(months, monthsAdded) << endl;
