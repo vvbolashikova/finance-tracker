@@ -123,6 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="chart.cpp" />
     <ClCompile Include="command-processor.cpp" />
     <ClCompile Include="finance-tracker.cpp" />
     <ClCompile Include="months.cpp" />
@@ -130,6 +131,7 @@
     <ClCompile Include="stringlib.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="chart.h" />
     <ClInclude Include="colors.h" />
     <ClInclude Include="command-processor.h" />
     <ClInclude Include="global.h" />

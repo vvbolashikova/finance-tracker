@@ -2,6 +2,7 @@
 #include <iomanip>
 #include "global.h"
 #include "colors.h"
+#include "stringlib.h"
 
 using std::endl;
 using std::cout;
@@ -15,12 +16,6 @@ using std::left;
 
 const char* shortMonthNames[12] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
                                 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
-
-void printChars(char c, int n)
-{
-    for (int i = 0; i < n; i++)
-        cout << c;
-}
 
 double getBalance(Month month)
 {

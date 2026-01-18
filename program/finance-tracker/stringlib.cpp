@@ -17,6 +17,12 @@ double pow(double base, int power)
     return result;
 }
 
+void printChars(char c, int n)
+{
+    for (int i = 0; i < n; i++)
+        cout << c;
+}
+
 void trim(char** str, char c)
 {
     if (!str || !*str) return;

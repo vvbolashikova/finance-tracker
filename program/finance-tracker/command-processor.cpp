@@ -4,6 +4,7 @@
 #include "months.h"
 #include "colors.h"
 #include "sort.h"
+#include "chart.h"
 
 using std::cout;
 using std::cin;
@@ -191,9 +192,9 @@ void report(Month* months, int &monthsAdded)
     displayMonthsReport(months, monthsAdded);
 }
 
-void chart()
+void chart(Month* months, int& monthsAdded)
 {
-
+    displayIncomeChart(months, monthsAdded);
 }
 
 int monthToNumber(char* month)
@@ -337,7 +338,7 @@ bool executeCommand(char* command, Month* months, int& setupMonths, int& monthsA
     }
     else if (compareStrings(command, "chart") == 0)
     {
-        chart();
+        chart(months, monthsAdded);
         return true;
     }
     else if (stringStartsWith(command, "search "))
