@@ -22,13 +22,13 @@ int main()
 
     bool isSetup = false;
     
-    while (strcmp(input, "exit") != 0)
+    while (compareStrings(input, "exit") != 0)
     {
         toLower(input);
 
         char* command = input;
 
-        bool isCommandSetup = !(strcmp(command, "setup"));
+        bool isCommandSetup = !(compareStrings(command, "setup"));
 
         trim(&command, ' ');
 

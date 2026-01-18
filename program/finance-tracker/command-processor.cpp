@@ -3,6 +3,7 @@
 #include "global.h"
 #include "months.h"
 #include "colors.h"
+#include "sort.h"
 
 using std::cout;
 using std::cin;
@@ -15,6 +16,11 @@ using std::endl;
 const char* monthNames[12] = { "January", "February", "March", "April", "May", "June", 
                                 "July", "August", "September", "October", "November", "December" };
 
+void displayInvalidArgMessage(const char* command)
+{
+    cout << RED << "Invalid argument(s) for command <" << command << ">." << RESET << endl;
+}
+
 void clearInputStream()
 {
     if (cin.fail())
@@ -24,11 +30,24 @@ void clearInputStream()
     }
 }
 
+bool isValidMonthName(char* arg)
+{
+    const char* lowercaseMonths[24] = {"january", "february", "march", "april", "may", "june",
+                                "july", "august", "september", "october", "november", "december" };
+    for (int i = 0; i < 12; i++)
+    {
+        if (strcmp(arg, lowercaseMonths[i]) == 0)
+            return true;
+    }
+    
+    return false;
+}
+
 bool isValidSortArg(char* arg)
 {
-    return strcmp(arg, "income") == 0 ||
-        strcmp(arg, "expense") == 0 ||
-        strcmp(arg, "balance") == 0;
+    return compareStrings(arg, "income") == 0 ||
+        compareStrings(arg, "expense") == 0 ||
+        compareStrings(arg, "balance") == 0;
 }
 
 bool isValidMonthNumber(char* arg)
@@ -75,68 +94,103 @@ void setup(int& setupMonths)
     }
 
     setupMonths = toInteger(arg);
-    cout << YELLOW << " Profile created successfully." << RESET << endl;
+    cout << YELLOW << " Profile created successfully." << RESET << endl << endl;
 }
 
+int readMonth()
+{
+    char monthStr[10];
+    char* month = monthStr;
+
+    while (true)
+    {
+        cin.getline(monthStr, 10);
+        clearInputStream();
+
+        month = monthStr;
+        trim(&month, ' ');
+
+        if (isValidMonthNumber(month))
+            break;
+
+        cout << RED << " The month must be a number between 1 and 12. " << RESET << endl;
+        cout << " Enter month (1-12): ";
+    }
+
+    return toInteger(month);
+}
+
+double readIncome()
+{
+    char incomeStr[10];
+    char* income = incomeStr;
+
+    while (true)
+    {
+        cin.getline(incomeStr, 10);
+        clearInputStream();
+
+        income = incomeStr;
+        trim(&income, ' ');
+
+        if (isDouble(income))
+            break;
+
+        cout << RED << " Income must be a valid number." << RESET << endl;
+        cout << " Enter income: ";
+    }
+
+    return toDouble(income);
+}
+
+double readExpense()
+{
+    char expenseStr[10];
+    char* expense = expenseStr;
+
+    while (true)
+    {
+        cin.getline(expenseStr, 10);
+        clearInputStream();
+
+        expense = expenseStr;
+        trim(&expense, ' ');
+
+        if (isDouble(expense))
+            break;
+
+        cout << RED << " Expense must be a valid number." << RESET << endl;
+        cout << " Enter expense: ";
+    }
+
+    return toDouble(expense);
+}
 
 void add(Month* months, int& monthsAdded)
 {
     cout << " Enter month (1-12): ";
+    short month = readMonth();
 
-    char monthStr[10];
-    cin.getline(monthStr, 10);
-
-    char* month = monthStr;
-    trim(&month, ' ');
-
-    while (!isValidMonthNumber(month))
-    {
-        cout << RED << " The month must be a number between 1 and 12. " << RESET << endl;
-        cout << " Enter month (1-12): ";
-        cin.getline(monthStr, 10);
-        month = monthStr;
-        trim(&month, ' ');
-    }
-
-    char incomeStr[10];
     cout << " Enter income: ";
-    cin.getline(incomeStr, 10);
-    char* income = incomeStr;
-    
-    while (!isDouble(income))
-    {
-        cout << RED << " Income must be a valid number." << RESET << endl;
-        cout << " Enter income: ";
-        cin.getline(incomeStr, 10);
-        income = incomeStr;
-    }
+    double income = readIncome();
 
-    char expenseStr[10];
     cout << " Enter expense: ";
-    cin.getline(expenseStr, 10);
+    double expense = readExpense();
 
-    char* expense = expenseStr;;
-    while (!isDouble(expense))
-    {
-        cout << RED << " Expense must be a valid number." << RESET<< endl;
-        cout << " Enter expense: ";
-        cin.getline(expenseStr, 10);
-        expense = expenseStr;
-    }
+    months[monthsAdded].number = month;
+    months[monthsAdded].income = income;
+    months[monthsAdded].expense = expense;
 
-    int monthInd = toInteger(month) - 1;
-
-    double incomeNum = toDouble(income);
-    double expenseNum = toDouble(expense);
-
-    months[monthInd].income = incomeNum;
-    months[monthInd].expense = expenseNum;
-
-    cout << YELLOW << " Balance for " << monthNames[monthInd] << " = ";
-    displaySubtractionResultWithSign(incomeNum, expenseNum);
+    cout << YELLOW << " Balance for " << monthNames[month-1] << ": ";
+    displaySubtractionResultWithSign(income, expense);
     cout << RESET << endl;
 
     monthsAdded++;
+
+    cout << YELLOW << " Data for " << monthNames[month - 1] << " has been saved successfully.";
+    cout << RESET << endl << endl;
+
+    sortByNumber(months, monthsAdded);
 }
 
 void report(Month* months, int &monthsAdded)
@@ -149,9 +203,23 @@ void chart()
 
 }
 
-void search(char* arg)
+void search(char* arg, Month* months, int& monthsAdded)
 {
+    bool found = false;
+    int index = 0;
+    for (int i = 0; i < monthsAdded; i++)
+    {
+        if (months[i].number == monthToNumber(arg))
+        {
+            found = true;
+            index = i;
+            break;
+        }
+    }
+    if (found)
+    {
 
+    }
 }
 
 void sort(char* arg)
@@ -165,47 +233,50 @@ void forecast(char* arg, Month* months, int &monthsAdded)
     forecastNMonthsAhead(months, monthsAdded, monthsAhead);
 }
 
+//void help()
+//{
+//    cout << "Command list:" << endl;
+//}
+
 bool executeCommand(char* command, Month* months, int& setupMonths, int& monthsAdded)
 {
-    if (strcmp(command, "setup") == 0)
+    if (compareStrings(command, "setup") == 0)
     {
         setup(setupMonths);
         return true;
     }
-
-    if (strcmp(command, "add") == 0)
+    else if (compareStrings(command, "add") == 0)
     {
         add(months, monthsAdded);
         return true;
     }
-
-    if (strcmp(command, "report") == 0)
+    else if (compareStrings(command, "report") == 0)
     {
         report(months, monthsAdded);
         return true;
     }
-
-    if (strcmp(command, "chart") == 0)
+    else if (compareStrings(command, "chart") == 0)
     {
         chart();
         return true;
     }
-
-    if (stringStartsWith(command, "search "))
+    else if (stringStartsWith(command, "search "))
     {
         int len = strlen(command);
         char* arg = substring(command, SEARCH_ARG_INDEX, len);
         trim(&arg, ' ');
+        toLower(arg);
 
-        if (isValidMonthNumber(arg))
+        if (isValidMonthNumber(arg) || isValidMonthName(arg))
         {
             search(arg);
-            delete[] arg;
-            return true;
+        }
+        else
+        {
+            displayInvalidArgMessage("search");
         }
     }
-
-    if (stringStartsWith(command, "sort "))
+    else if (stringStartsWith(command, "sort "))
     {
         int len = strlen(command);
         char* arg = substring(command, SORT_ARG_INDEX, len);
@@ -214,12 +285,17 @@ bool executeCommand(char* command, Month* months, int& setupMonths, int& monthsA
         if (isValidSortArg(arg))
         {
             sort(arg);
-            delete[] arg;
-            return true;
         }
-    }
+        else
+        {
+            displayInvalidArgMessage("sort");
+        }
 
-    if (stringStartsWith(command, "forecast "))
+        delete[] arg;
+        return true;
+
+    }
+    else if (stringStartsWith(command, "forecast "))
     {
         int len = strlen(command);
         char* arg = substring(command, FORECAST_ARG_INDEX, len);
@@ -228,16 +304,54 @@ bool executeCommand(char* command, Month* months, int& setupMonths, int& monthsA
         if (isValidForecastArg(arg))
         {
             forecast(arg, months, monthsAdded);
-            delete[] arg;
-            return true;
         }
+        else
+        {
+            displayInvalidArgMessage("forecast");
+            cout << "forecast <monthsAhead>" << endl;
+        }
+        delete[] arg;
+        return true;
     }
-
-    if (strcmp(command, "cls") == 0)
+    else if (compareStrings(command, "cls") == 0)
     {
         cout << "\033[2J\033[H";
         return true;
     }
 
+    /*else if (compareStrings(command, "help") == 0)
+    {
+        help();
+    }*/
+
     return false;
 }
+
+/*
+void displayForecastFormat()
+{
+    cout << " forecast <monthsAhead>" << endl;
+}
+
+void displaySortFormat()
+{
+    cout << " sort <criteria> <order>" << endl;
+    cout << " criteria: income / expense / balance" << endl;
+    cout << " order: asc / desc" << endl;
+}
+
+void displaySearchFormat()
+{
+    cout << " search <month>" << endl;
+    cout << " month: January-December | Jan-Dec| 1-12" << endl;
+}
+
+void displayCommandFormat(const char* command)
+{
+    if (compareStrings(command, "forecast"))
+    {
+
+    }
+}
+
+*/

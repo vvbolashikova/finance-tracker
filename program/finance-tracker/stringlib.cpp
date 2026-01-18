@@ -60,7 +60,7 @@ bool stringStartsWith(const char* str, const char* substr)
     return true;
 }
 
-int my_strcmp(const char* s1, const char* s2) 
+int compareStrings(const char* s1, const char* s2) 
 {
     while (*s1 && (*s1 == *s2)) 
     {

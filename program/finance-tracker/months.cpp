@@ -5,6 +5,11 @@
 using std::endl;
 using std::cout;
 
+void spaces(int n)
+{
+    for (int i = 0; i < n; i++)
+        cout << " ";
+}
 
 double getBalance(Month month)
 {
@@ -25,13 +30,13 @@ double getExpenseRatio(Month month)
 
 void displayMonthInfo(Month month)
 {
-    cout << "Income: " << month.income << endl;
-    cout << "Expense: " << month.expense << endl;
+    cout << " Income: " << month.income << endl;
+    cout << " Expense: " << month.expense << endl;
 
-    cout << "Balance: ";
+    cout << " Balance: ";
     displayBalanceWithSign(month);
 
-    cout << "Expense Ratio: " << getExpenseRatio(month) << '%' << endl;
+    cout << " Expense Ratio: " << getExpenseRatio(month) << '%' << endl;
 }
 
 double getTotalIncome(Month* months, int& monthsAdded)
@@ -78,11 +83,11 @@ void displayMonthsTable(Month* months, int& monthsAdded)
 {
     /* add table */
 
-    cout << "Total Income: " << getTotalIncome(months, monthsAdded) << endl;
-    cout << "Total Expense: " << getTotalExpense(months, monthsAdded) << endl;
+    cout << " Total Income: " << getTotalIncome(months, monthsAdded) << endl;
+    cout << " Total Expense: " << getTotalExpense(months, monthsAdded) << endl;
 
     int averageBalance = getAverageBalance(months, monthsAdded);
-    cout << "Average Balance: ";
+    cout << " Average Balance: ";
     if (averageBalance > 0)
         cout << '+';
     cout << averageBalance << endl;
@@ -112,6 +117,6 @@ void forecastNMonthsAhead(Month* months, int& monthsAdded, int monthsAhead)
             totalBalance += averageBalance;
             monthsLeft++;
         }
-        cout << "Expected to run out of money in " << monthsLeft << " months." << endl;
+        cout << " Expected to run out of money in " << monthsLeft << " months." << endl;
     }
 }

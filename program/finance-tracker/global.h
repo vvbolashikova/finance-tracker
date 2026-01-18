@@ -5,17 +5,18 @@ using std::cout;
 using std::endl;
 
 struct Month {
-
+    short number;
     double income, expense;
 
-public:
     Month()
     {
+        number = 0;
         income = 0;
         expense = 0;
     }
-    Month(double income, double expense)
+    Month(short number, double income, double expense)
     {
+        this->number = number;
         this->income = income;
         this->expense = expense;
     }
