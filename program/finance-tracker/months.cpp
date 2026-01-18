@@ -1,5 +1,6 @@
 #include <iostream>
 #include "global.h"
+#include "colors.h"
 
 using std::endl;
 using std::cout;
@@ -33,10 +34,10 @@ void displayMonthInfo(Month month)
     cout << "Expense Ratio: " << getExpenseRatio(month) << '%' << endl;
 }
 
-double getTotalIncome(Month* months, int n)
+double getTotalIncome(Month* months, int& monthsAdded)
 {
     double totalIncome = 0;
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < monthsAdded; i++)
     {
         totalIncome += months[i].income;
     }
@@ -44,10 +45,10 @@ double getTotalIncome(Month* months, int n)
     return totalIncome;
 }
 
-double getTotalExpense(Month* months, int n)
+double getTotalExpense(Month* months, int& monthsAdded)
 {
     double totalExpense = 0;
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < monthsAdded; i++)
     {
         totalExpense += months[i].expense;
     }
@@ -55,10 +56,10 @@ double getTotalExpense(Month* months, int n)
     return totalExpense;
 }
 
-double getTotalBalance(Month* months, int n)
+double getTotalBalance(Month* months, int& monthsAdded)
 {
     double totalBalance = 0;
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < monthsAdded; i++)
     {
         totalBalance += getBalance(months[i]);
     }
@@ -66,41 +67,42 @@ double getTotalBalance(Month* months, int n)
     return totalBalance;
 }
 
-double getAverageBalance(Month* months, int n)
+double getAverageBalance(Month* months, int& monthsAdded)
 {
-    double balance = getTotalBalance(months, n);
+    double balance = getTotalBalance(months, monthsAdded);
 
-    return (balance / n);
+    return (balance / monthsAdded);
 }
 
-void displayMonthsTable(Month* months, int n)
+void displayMonthsTable(Month* months, int& monthsAdded)
 {
     /* add table */
 
-    cout << "Total Income: " << getTotalIncome(months, n) << endl;
-    cout << "Total Expense: " << getTotalExpense(months, n) << endl;
+    cout << "Total Income: " << getTotalIncome(months, monthsAdded) << endl;
+    cout << "Total Expense: " << getTotalExpense(months, monthsAdded) << endl;
 
-    int averageBalance = getAverageBalance(months, n);
+    int averageBalance = getAverageBalance(months, monthsAdded);
     cout << "Average Balance: ";
     if (averageBalance > 0)
         cout << '+';
     cout << averageBalance << endl;
 }
 
-void forecastNMonthsAhead(Month* months, int n, int monthsAhead)
+void forecastNMonthsAhead(Month* months, int& monthsAdded, int monthsAhead)
 {
-    double totalBalance = getTotalBalance(months, n);
-    double averageBalance = getAverageBalance(months, n);
+    double totalBalance = getTotalBalance(months, monthsAdded);
+    double averageBalance = getAverageBalance(months, monthsAdded);
 
-    cout << "Current total savings: " << totalBalance << endl;
-    cout << "Average monthly change: ";
+    cout << " Current total savings: " << totalBalance << endl;
+    cout << " Average monthly change: ";
     if (averageBalance > 0)
         cout << '+';
     cout << averageBalance << endl;
 
     if (averageBalance >= 0)
     {
-        cout << "Predicted savings after " << n << " months: " << totalBalance + n * averageBalance;
+        cout << GREEN << " Predicted savings after " << monthsAhead << " months: ";
+        cout << totalBalance + (monthsAhead * averageBalance) << RESET << endl;
     }
     else
     {

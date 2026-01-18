@@ -40,7 +40,6 @@ bool isValidMonthNumber(char* arg)
     return value >= 1 && value <= 12;
 }
 
-
 bool isValidForecastArg(char* arg)
 {
     return isInteger(arg);
@@ -160,10 +159,10 @@ void sort(char* arg)
 
 }
 
-void forecast(char* arg, Month* months, int &setupMonths)
+void forecast(char* arg, Month* months, int &monthsAdded)
 {
     int monthsAhead = toInteger(arg);
-    forecastNMonthsAhead(months, setupMonths, monthsAhead);
+    forecastNMonthsAhead(months, monthsAdded, monthsAhead);
 }
 
 bool executeCommand(char* command, Month* months, int& setupMonths, int& monthsAdded)
@@ -228,7 +227,7 @@ bool executeCommand(char* command, Month* months, int& setupMonths, int& monthsA
 
         if (isValidForecastArg(arg))
         {
-            forecast(arg, months, setupMonths);
+            forecast(arg, months, monthsAdded);
             delete[] arg;
             return true;
         }
