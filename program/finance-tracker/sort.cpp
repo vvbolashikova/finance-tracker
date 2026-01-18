@@ -8,93 +8,63 @@ void swap(Month& month1, Month& month2)
     month2 = temp;
 }
 
-void sortByBalanceDesc(Month* months, int& monthsAdded)
+void sortByBalanceDesc(Month* months, int& monthsAdded, Month* sortedMonths)
 {
+    for (int i = 0; i < monthsAdded; i++)
+    {
+        sortedMonths[i] = months[i];
+    }
+
     for (int i = 0; i < monthsAdded - 1; i++)
     {
         int maxIndex = i;
         for (int j = i + 1; j < monthsAdded; j++)
         {
-            if (getBalance(months[j]) > getBalance(months[maxIndex]))
+            if (getBalance(sortedMonths[j]) > getBalance(sortedMonths[maxIndex]))
                 maxIndex = j;
         }
-
-        swap(months[i], months[maxIndex]);
+        if (maxIndex != i)
+            swap(sortedMonths[i], sortedMonths[maxIndex]);
     }
 }
 
-void sortByBalanceAsc(Month* months, int& monthsAdded)
+void sortByIncomeDesc(Month* months, int& monthsAdded, Month* sortedMonths)
 {
-    for (int i = 0; i < monthsAdded - 1; i++)
+    for (int i = 0; i < monthsAdded; i++)
     {
-        int minIndex = i;
-        for (int j = i + 1; j < monthsAdded; j++)
-        {
-            if (getBalance(months[j]) < getBalance(months[minIndex]))
-                minIndex = j;
-        }
-
-        swap(months[i], months[minIndex]);
+        sortedMonths[i] = months[i];
     }
-}
 
-void sortByIncomeDesc(Month* months, int& monthsAdded)
-{
     for (int i = 0; i < monthsAdded - 1; i++)
     {
         int maxIndex = i;
         for (int j = i + 1; j < monthsAdded; j++)
         {
-            if (months[j].income > months[maxIndex].income)
+            if (sortedMonths[j].income > sortedMonths[maxIndex].income)
                 maxIndex = j;
         }
-
-        swap(months[i], months[maxIndex]);
+        if (maxIndex != i)
+            swap(sortedMonths[i], sortedMonths[maxIndex]);
     }
 }
 
-void sortByIncomeAsc(Month* months, int& monthsAdded)
+void sortByExpenseDesc(Month* months, int& monthsAdded, Month* sortedMonths)
 {
-    for (int i = 0; i < monthsAdded - 1; i++)
+    for (int i = 0; i < monthsAdded; i++)
     {
-        int minIndex = i;
-        for (int j = i + 1; j < monthsAdded; j++)
-        {
-            if (months[j].income < months[minIndex].income)
-                minIndex = j;
-        }
-
-        swap(months[i], months[minIndex]);
+        sortedMonths[i] = months[i];
     }
-}
 
-void sortByExpenseDesc(Month* months, int& monthsAdded)
-{
     for (int i = 0; i < monthsAdded - 1; i++)
     {
         int maxIndex = i;
         for (int j = i + 1; j < monthsAdded; j++)
         {
-            if (months[j].expense > months[maxIndex].expense)
+            if (sortedMonths[j].expense > sortedMonths[maxIndex].expense)
                 maxIndex = j;
         }
-
-        swap(months[i], months[maxIndex]);
-    }
-}
-
-void sortByExpenseAsc(Month* months, int& monthsAdded)
-{
-    for (int i = 0; i < monthsAdded - 1; i++)
-    {
-        int minIndex = i;
-        for (int j = i + 1; j < monthsAdded; j++)
-        {
-            if (months[j].expense < months[minIndex].expense)
-                minIndex = j;
-        }
-
-        swap(months[i], months[minIndex]);
+        if (maxIndex != i)
+            swap(sortedMonths[i], sortedMonths[maxIndex]);
     }
 }
 

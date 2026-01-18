@@ -34,15 +34,15 @@ int main()
 
         if (isCommandSetup && isSetup)
         {
-            cout << RED << " Session already set up" << RESET << endl;
+            cout << RED << " Session already set up." << RESET << endl;
         }
         else if (!isCommandSetup && !isSetup)
         {
-            cout << RED << " Set up session first" << RESET << endl;
+            cout << RED << " Set up session first." << RESET << endl;
         }
         else if (!executeCommand(command, months, setupMonths, monthsAdded))
         {
-            cout << RED << " No such command" << RESET << endl;
+            cout << RED << " No such command." << RESET << endl;
         }
 
         if (isCommandSetup)
@@ -55,4 +55,6 @@ int main()
         cout << " >> ";
         cin.getline(input, 1024);
     }
+
+    delete[] months;
 }

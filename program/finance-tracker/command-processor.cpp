@@ -188,7 +188,7 @@ void add(Month* months, int& monthsAdded)
 
 void report(Month* months, int &monthsAdded)
 {
-    displayMonthsTable(months, monthsAdded);
+    displayMonthsReport(months, monthsAdded);
 }
 
 void chart()
@@ -292,17 +292,22 @@ void sort(char* command, Month* months, int& monthsAdded)
     trim(&arg, ' ');
     toLower(arg);
 
+    Month* sortedMonths = new Month[monthsAdded];
+
     if (compareStrings(arg, "income") == 0)
     {
-        sortByIncomeDesc(months, monthsAdded);
+        sortByIncomeDesc(months, monthsAdded, sortedMonths);
+        printMonthsTable(sortedMonths, monthsAdded);
     }
     else if (compareStrings(arg, "expense") == 0)
     {
-        sortByExpenseDesc(months, monthsAdded);
+        sortByExpenseDesc(months, monthsAdded, sortedMonths);
+        printMonthsTable(sortedMonths, monthsAdded);
     }
     else if ((compareStrings(arg, "balance") == 0))
     {
-        sortByBalanceDesc(months, monthsAdded);
+        sortByBalanceDesc(months, monthsAdded, sortedMonths);
+        printMonthsTable(sortedMonths, monthsAdded);
     }
     else
     {
@@ -310,6 +315,7 @@ void sort(char* command, Month* months, int& monthsAdded)
     }
 
     delete[] arg;
+    delete[] sortedMonths;
 }
 
 bool executeCommand(char* command, Month* months, int& setupMonths, int& monthsAdded)

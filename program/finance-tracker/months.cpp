@@ -10,11 +10,11 @@ using std::setprecision;
 using std::right;
 using std::left;
 
+#define MONTH_W 6
+#define MONEY_W 12
 
 const char* shortMonthNames[12] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
                                 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
-#define MONTH_W 6
-#define MONEY_W 12
 
 void printChars(char c, int n)
 {
@@ -47,7 +47,7 @@ void displayMonthInfo(Month month)
     cout << " Balance: ";
     displayBalanceWithSign(month);
 
-    cout << " Expense Ratio: " << getExpenseRatio(month) << '%' << endl;
+    cout << endl << " Expense Ratio: " << getExpenseRatio(month) << '%' << endl;
 }
 
 double getTotalIncome(Month* months, int& monthsAdded)
@@ -111,7 +111,7 @@ void printTableRows(Month* months, int& monthsAdded)
 
         cout << " ";
         cout << left
-            << setw(MONTH_W) << shortMonthNames[i] << " | "
+            << setw(MONTH_W) << shortMonthNames[months[i].number - 1] << " | "
             << right
             << setw(MONEY_W) << months[i].income << " | "
             << setw(MONEY_W) << months[i].expense << " | ";
@@ -127,10 +127,9 @@ void printTableRows(Month* months, int& monthsAdded)
     cout << endl;
 }
 
-void displayMonthsTable(Month* months, int& monthsAdded)
+void printMonthsTable(Month* months, int& monthsAdded)
 {
     cout << std::fixed << std::setprecision(2);
-
     printTableHeader();
 
     cout << " ";
@@ -138,6 +137,10 @@ void displayMonthsTable(Month* months, int& monthsAdded)
     cout << endl;
 
     printTableRows(months, monthsAdded);
+}
+void displayMonthsReport(Month* months, int& monthsAdded)
+{
+    printMonthsTable(months, monthsAdded);
 
     cout << " Total Income: " << getTotalIncome(months, monthsAdded) << endl;
     cout << " Total Expense: " << getTotalExpense(months, monthsAdded) << endl;
@@ -146,7 +149,7 @@ void displayMonthsTable(Month* months, int& monthsAdded)
     cout << " Average Balance: ";
     if (averageBalance > 0)
         cout << '+';
-    cout << averageBalance << endl;
+    cout << averageBalance << endl << endl;
 }
 
 void forecastNMonthsAhead(Month* months, int& monthsAdded, int monthsAhead)
