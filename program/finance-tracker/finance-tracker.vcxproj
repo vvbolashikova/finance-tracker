@@ -129,6 +129,7 @@
     <ClCompile Include="months.cpp" />
     <ClCompile Include="report.cpp" />
     <ClCompile Include="run.cpp" />
+    <ClCompile Include="sort-utils.cpp" />
     <ClCompile Include="sort.cpp" />
     <ClCompile Include="stringlib.cpp" />
   </ItemGroup>
@@ -140,6 +141,7 @@
     <ClInclude Include="months.h" />
     <ClInclude Include="report.h" />
     <ClInclude Include="run.h" />
+    <ClInclude Include="sort-utils.h" />
     <ClInclude Include="sort.h" />
     <ClInclude Include="stringlib.h" />
   </ItemGroup>

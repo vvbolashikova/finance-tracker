@@ -15,8 +15,6 @@
 
 #pragma once
 #include  "global.h"
+#include "sort-utils.h"
 
-void sortByBalanceDesc(Month* months, int& monthsAdded, Month* sortedMonths);
-void sortByIncomeDesc(Month* months, int& monthsAdded, Month* sortedMonths);
-void sortByExpenseDesc(Month* months, int& monthsAdded, Month* sortedMonths);
-void sortByNumber(Month* months, int& monthsAdded);
+void sortMonths(Month* months, int& monthsAdded, Month* sortedMonths, MonthComparator comp);

@@ -39,6 +39,9 @@
     <ClCompile Include="run.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="sort-utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stringlib.h">
@@ -66,6 +69,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="run.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sort-utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

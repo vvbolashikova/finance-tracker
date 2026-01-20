@@ -9,12 +9,13 @@
 * @idnumber 6MI0600688
 * @compiler VC
 *
-* sorting functions
+* main sorting functions
 *
 */
 
 #include "global.h"
 #include "months.h"
+#include "sort-utils.h"
 
 void swap(Month& month1, Month& month2)
 {
@@ -23,77 +24,27 @@ void swap(Month& month1, Month& month2)
     month2 = temp;
 }
 
-void sortByBalanceDesc(Month* months, int& monthsAdded, Month* sortedMonths)
+void sortMonths(Month* months, int& monthsAdded, Month* sortedMonths, MonthComparator comp)
 {
-    for (int i = 0; i < monthsAdded; i++)
+    if (months != sortedMonths)
     {
-        sortedMonths[i] = months[i];
-    }
+        for (int i = 0; i < monthsAdded; i++)
+        {
+            sortedMonths[i] = months[i];
+        }
+    }    
 
     for (int i = 0; i < monthsAdded - 1; i++)
     {
-        int maxIndex = i;
+        int targetIndex = i;
+
         for (int j = i + 1; j < monthsAdded; j++)
         {
-            if (getBalance(sortedMonths[j]) > getBalance(sortedMonths[maxIndex]))
-                maxIndex = j;
-        }
-        if (maxIndex != i)
-            swap(sortedMonths[i], sortedMonths[maxIndex]);
-    }
-}
-
-void sortByIncomeDesc(Month* months, int& monthsAdded, Month* sortedMonths)
-{
-    for (int i = 0; i < monthsAdded; i++)
-    {
-        sortedMonths[i] = months[i];
-    }
-
-    for (int i = 0; i < monthsAdded - 1; i++)
-    {
-        int maxIndex = i;
-        for (int j = i + 1; j < monthsAdded; j++)
-        {
-            if (sortedMonths[j].income > sortedMonths[maxIndex].income)
-                maxIndex = j;
-        }
-        if (maxIndex != i)
-            swap(sortedMonths[i], sortedMonths[maxIndex]);
-    }
-}
-
-void sortByExpenseDesc(Month* months, int& monthsAdded, Month* sortedMonths)
-{
-    for (int i = 0; i < monthsAdded; i++)
-    {
-        sortedMonths[i] = months[i];
-    }
-
-    for (int i = 0; i < monthsAdded - 1; i++)
-    {
-        int maxIndex = i;
-        for (int j = i + 1; j < monthsAdded; j++)
-        {
-            if (sortedMonths[j].expense > sortedMonths[maxIndex].expense)
-                maxIndex = j;
-        }
-        if (maxIndex != i)
-            swap(sortedMonths[i], sortedMonths[maxIndex]);
-    }
-}
-
-void sortByNumber(Month* months, int& monthsAdded)
-{
-    for (int i = 0; i < monthsAdded - 1; i++)
-    {
-        int minIndex = i;
-        for (int j = i + 1; j < monthsAdded; j++)
-        {
-            if (months[j].number < months[minIndex].number)
-                minIndex = j;
+            if (comp(months[j], months[targetIndex]))
+                targetIndex = j;
         }
 
-        swap(months[i], months[minIndex]);
+        if (targetIndex != i)
+            swap(sortedMonths[i], sortedMonths[targetIndex]);
     }
 }

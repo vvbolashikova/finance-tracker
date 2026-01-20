@@ -63,8 +63,6 @@ void printTableRows(Month* months, int& monthsAdded)
             cout << setw(MONEY_W - 2) << GREEN << '+' << balance << RESET << endl;
         else
             cout << setw(MONEY_W - 2) << RED << balance << RESET << endl;
-
-        
     }
 
     cout << " ";
@@ -86,6 +84,7 @@ void printMonthsTable(Month* months, int& monthsAdded)
 
 void displayMonthsReport(Month* months, int& monthsAdded)
 {
+    cout << endl;
     printMonthsTable(months, monthsAdded);
 
     cout << " Total Income: " << getTotalIncome(months, monthsAdded) << endl;

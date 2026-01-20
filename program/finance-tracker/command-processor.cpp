@@ -19,6 +19,7 @@
 #include "months.h"
 #include "colors.h"
 #include "sort.h"
+#include "sort-utils.h"
 #include "chart.h"
 #include "report.h"
 
@@ -32,6 +33,21 @@ using std::endl;
 
 const char* monthNames[12] = { "January", "February", "March", "April", "May", "June", 
                                 "July", "August", "September", "October", "November", "December" };
+
+const MonthComparator comparators[6] = { compareByIncomeAsc, compareByIncomeDesc,
+                                         compareByExpenseAsc, compareByExpenseDesc,
+                                         compareByBalanceAsc, compareByBalanceDesc };
+
+char* getPureArgument(char* command, int argIndex)
+{
+    int len = strlen(command);
+    char* arg = substring(command, SORT_ARG_INDEX, len);
+
+    trim(&arg, ' ');
+    toLower(arg);
+
+    return arg;
+}
 
 void displayInvalidArgMessage(const char* command)
 {
@@ -200,7 +216,7 @@ void add(Month* months, int& monthsAdded)
     cout << YELLOW << " Data for " << monthNames[month - 1] << " has been saved successfully.";
     cout << RESET << endl << endl;
 
-    sortByNumber(months, monthsAdded);
+    sortMonths(months, monthsAdded, months, compareByNumberAsc);
 }
 
 void report(Month* months, int &monthsAdded)
@@ -265,9 +281,7 @@ void searchByMonthNumber(int arg, Month* months, int& monthsAdded)
 
 void forecast(char* command, Month* months, int &monthsAdded)
 {
-    int len = strlen(command);
-    char* arg = substring(command, FORECAST_ARG_INDEX, len);
-    trim(&arg, ' ');
+    char* arg = getPureArgument(command, FORECAST_ARG_INDEX);
 
     if (isValidForecastArg(arg))
     {
@@ -283,10 +297,7 @@ void forecast(char* command, Month* months, int &monthsAdded)
 
 void search(char* command, Month* months, int& monthsAdded)
 {
-    int len = strlen(command);
-    char* arg = substring(command, SEARCH_ARG_INDEX, len);
-    trim(&arg, ' ');
-    toLower(arg);
+    char* arg = getPureArgument(command, SEARCH_ARG_INDEX);
 
     if (isValidMonthNumber(arg))
     {
@@ -304,34 +315,24 @@ void search(char* command, Month* months, int& monthsAdded)
 
 void sort(char* command, Month* months, int& monthsAdded)
 {
-    int len = strlen(command);
-    char* arg = substring(command, SORT_ARG_INDEX, len);
-    trim(&arg, ' ');
-    toLower(arg);
-
+    char* arg = getPureArgument(command, SORT_ARG_INDEX);
     Month* sortedMonths = new Month[monthsAdded];
 
-    if (compareStrings(arg, "income") == 0)
-    {
-        sortByIncomeDesc(months, monthsAdded, sortedMonths);
-        printMonthsTable(sortedMonths, monthsAdded);
-    }
-    else if (compareStrings(arg, "expense") == 0)
-    {
-        sortByExpenseDesc(months, monthsAdded, sortedMonths);
-        printMonthsTable(sortedMonths, monthsAdded);
-    }
-    else if ((compareStrings(arg, "balance") == 0))
-    {
-        sortByBalanceDesc(months, monthsAdded, sortedMonths);
-        printMonthsTable(sortedMonths, monthsAdded);
-    }
-    else
-    {
-        displayInvalidArgMessage("sort");
-    }
+    const char* validArgCombinations[6] = {"income asc", "income desc", 
+                                            "expense asc", "expense desc", 
+                                            "balance asc", "balance desc"};
 
-    delete[] arg;
+    for (int i = 0; i < 6; i++)
+    {
+        if (compareStrings(arg, validArgCombinations[i]) == 0)
+        {
+            sortMonths(months, monthsAdded, sortedMonths, comparators[i]);
+            printMonthsTable(sortedMonths, monthsAdded);
+            return;
+        }
+    }
+    displayInvalidArgMessage("sort");
+
     delete[] sortedMonths;
 }
 
