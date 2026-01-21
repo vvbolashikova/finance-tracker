@@ -34,14 +34,38 @@ using std::endl;
 const char* monthNames[12] = { "January", "February", "March", "April", "May", "June", 
                                 "July", "August", "September", "October", "November", "December" };
 
-const MonthComparator comparators[6] = { compareByIncomeAsc, compareByIncomeDesc,
-                                         compareByExpenseAsc, compareByExpenseDesc,
-                                         compareByBalanceAsc, compareByBalanceDesc };
+const MonthComparator comparators[6] = { compareByIncomeDesc, compareByExpenseDesc,
+                                         compareByBalanceDesc, compareByIncomeAsc,
+                                         compareByExpenseAsc, compareByBalanceAsc };
+
+typedef void (*FormatFunction)();
+
+void printSortFormat()
+{
+    cout << " sort <type> <order>\n";
+    cout << " where <type> is one of income/expense/balance\n";
+    cout << "       <order> is one of asc/desc (optional)\n\n";
+}
+
+void printForecastFormat()
+{
+    cout << " forecast <monthsAhead>\n";
+    cout << " where <monthsAhead> is the number of months to be considered for the forecast.\n\n";
+}
+
+void printSearchFormat()
+{
+    cout << " search <month>\n";
+    cout << " where <month> is name or number of the desired month.\n\n";
+}
+
+const FormatFunction formatFunctions[3] = { printSortFormat, printForecastFormat, printSearchFormat };
+
 
 char* getPureArgument(char* command, int argIndex)
 {
     int len = strlen(command);
-    char* arg = substring(command, SORT_ARG_INDEX, len);
+    char* arg = substring(command, argIndex, len);
 
     trim(&arg, ' ');
     toLower(arg);
@@ -51,7 +75,8 @@ char* getPureArgument(char* command, int argIndex)
 
 void displayInvalidArgMessage(const char* command)
 {
-    cout << RED << "Invalid argument(s) for command <" << command << ">." << RESET << endl;
+    cout << RED << " Invalid argument(s) for command <" << command << ">." << RESET << endl;
+
 }
 
 void clearInputStream()
@@ -69,7 +94,7 @@ bool isValidMonthName(char* arg)
                                 "july", "august", "september", "october", "november", "december" };
     for (int i = 0; i < 12; i++)
     {
-        if (strcmp(arg, lowercaseMonths[i]) == 0)
+        if (compareStrings(arg, lowercaseMonths[i]) == 0)
             return true;
     }
     
@@ -258,6 +283,10 @@ void searchByMonthName(char* arg, Month* months, int& monthsAdded)
     {
         displayMonthInfo(months[index]);
     }
+    else
+    {
+        cout << " No data has been entered for the selected month." << endl << endl;
+    }
 }
 
 void searchByMonthNumber(int arg, Month* months, int& monthsAdded)
@@ -265,7 +294,7 @@ void searchByMonthNumber(int arg, Month* months, int& monthsAdded)
     bool found = false;
     int index = 0;
     for (int i = 0; i < monthsAdded; i++)
-    {
+    { 
         if (months[i].number == arg)
         {
             found = true;
@@ -276,6 +305,10 @@ void searchByMonthNumber(int arg, Month* months, int& monthsAdded)
     if (found)
     {
         displayMonthInfo(months[index]);
+    }
+    else
+    {
+        cout << " No data has been entered for the selected month." << endl << endl;
     }
 }
 
@@ -292,6 +325,7 @@ void forecast(char* command, Month* months, int &monthsAdded)
     {
         displayInvalidArgMessage("forecast");
     }
+
     delete[] arg;
 }
 
@@ -311,6 +345,8 @@ void search(char* command, Month* months, int& monthsAdded)
     {
         displayInvalidArgMessage("search");
     }
+
+    delete[] arg;
 }
 
 void sort(char* command, Month* months, int& monthsAdded)
@@ -318,9 +354,21 @@ void sort(char* command, Month* months, int& monthsAdded)
     char* arg = getPureArgument(command, SORT_ARG_INDEX);
     Month* sortedMonths = new Month[monthsAdded];
 
-    const char* validArgCombinations[6] = {"income asc", "income desc", 
-                                            "expense asc", "expense desc", 
-                                            "balance asc", "balance desc"};
+    const char* shortCommands[3] = { "income", "expense", "balance" };
+    for (int i = 0; i < 3; i++)
+    {
+        if (compareStrings(arg, shortCommands[i]) == 0)
+        {
+            sortMonths(months, monthsAdded, sortedMonths, comparators[i]);
+            printMonthsTable(sortedMonths, monthsAdded);
+            delete[] sortedMonths;
+            return;
+        }
+    }
+
+    const char* validArgCombinations[6] = { "income desc", "expense desc",
+                                            "balance desc", "income asc",
+                                            "expense asc", "balance asc" };
 
     for (int i = 0; i < 6; i++)
     {
@@ -328,12 +376,28 @@ void sort(char* command, Month* months, int& monthsAdded)
         {
             sortMonths(months, monthsAdded, sortedMonths, comparators[i]);
             printMonthsTable(sortedMonths, monthsAdded);
+            delete[] sortedMonths;
             return;
         }
     }
-    displayInvalidArgMessage("sort");
 
-    delete[] sortedMonths;
+    displayInvalidArgMessage("sort");
+}
+
+bool checkParamCommand(char* command, const char* targetCommand, FormatFunction printFunction, int argIndex)
+{
+    if (command[argIndex - 1] == ' ')
+    {
+        return true;
+    }
+    else if (command[argIndex - 1] == '\0')
+    {
+        cout << " Input does not match expected format of " << targetCommand << ":\n";
+        printFunction();
+    }
+    else
+        cout << RED << " Invalid command (did you mean '" << targetCommand << "'?).\n" << RESET;
+    return false;
 }
 
 bool executeCommand(char* command, Month* months, int& setupMonths, int& monthsAdded)
@@ -358,19 +422,22 @@ bool executeCommand(char* command, Month* months, int& setupMonths, int& monthsA
         chart(months, monthsAdded);
         return true;
     }
-    else if (stringStartsWith(command, "search "))
+    else if (stringStartsWith(command, "search"))
     {
-        search(command, months, monthsAdded);
+        if (checkParamCommand(command, "search", printSearchFormat, SEARCH_ARG_INDEX))
+            search(command, months, monthsAdded);
         return true;
     }
-    else if (stringStartsWith(command, "sort "))
+    else if (stringStartsWith(command, "sort"))
     {
-        sort(command, months, monthsAdded);
+        if (checkParamCommand(command, "sort", printSortFormat, SORT_ARG_INDEX))
+            sort(command, months, monthsAdded);
         return true;
     }
-    else if (stringStartsWith(command, "forecast "))
+    else if (stringStartsWith(command, "forecast"))
     {
-        forecast(command, months, monthsAdded);
+        if (checkParamCommand(command, "forecast", printForecastFormat, FORECAST_ARG_INDEX));
+            forecast(command, months, monthsAdded);
         return true;
     }
     else if (compareStrings(command, "cls") == 0)

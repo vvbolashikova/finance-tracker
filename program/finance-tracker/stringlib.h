@@ -26,3 +26,4 @@ bool isDouble(char* str);
 double toDouble(char* str);
 int compareStrings(const char* s1, const char* s2);
 void printChars(char c, int n);
+void concatStrings(char* dest, const char* src);

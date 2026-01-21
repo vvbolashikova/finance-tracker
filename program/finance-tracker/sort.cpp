@@ -40,7 +40,7 @@ void sortMonths(Month* months, int& monthsAdded, Month* sortedMonths, MonthCompa
 
         for (int j = i + 1; j < monthsAdded; j++)
         {
-            if (comp(months[j], months[targetIndex]))
+            if (comp(sortedMonths[j], sortedMonths[targetIndex]))
                 targetIndex = j;
         }
 

@@ -203,3 +203,15 @@ double toDouble(char* str)
     }
     return result;
 }
+
+void concatStrings(char* dest, const char* src) 
+{
+    unsigned len = strlen(dest);
+    int i = 0;
+    while (src[i] != '\0') 
+    {
+        dest[len++] = src[i];
+        i++;
+    }
+    dest[len] = '\0';
+}
