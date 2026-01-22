@@ -74,7 +74,6 @@ char* getPureArgument(char* command, int argIndex)
 void displayInvalidArgMessage(const char* command)
 {
     cout << RED << " Invalid argument(s) for command <" << command << ">." << RESET << endl;
-
 }
 
 void clearInputStream()
@@ -247,33 +246,6 @@ void searchByMonthNumber(int arg, Month* months, int& monthsAdded)
     }
 }
 
-void add(Month* months, int& monthsAdded)
-{
-    cout << " Enter month (1-12): ";
-    short month = readMonth();
-
-    cout << " Enter income: ";
-    double income = readIncome();
-
-    cout << " Enter expense: ";
-    double expense = readExpense();
-
-    months[monthsAdded].number = month;
-    months[monthsAdded].income = income;
-    months[monthsAdded].expense = expense;
-
-    cout << YELLOW << " Balance for " << monthNames[month-1] << ": ";
-    displaySubtractionResultWithSign(income, expense);
-    cout << RESET << endl;
-
-    monthsAdded++;
-
-    cout << YELLOW << " Data for " << monthNames[month - 1] << " has been saved successfully.";
-    cout << RESET << endl << endl;
-
-    sortMonths(months, monthsAdded, months, compareByNumberAsc);
-}
-
 void setup(int& setupMonths)
 {
     cout << " Enter number of months (1-12): ";
@@ -297,7 +269,36 @@ void setup(int& setupMonths)
     }
 
     setupMonths = toInteger(arg);
-    cout << YELLOW << " Profile created successfully." << RESET << endl << endl;
+    cout << GREEN << " Profile created successfully." << RESET << endl << endl;
+}
+
+void add(Month* months, int& monthsAdded)
+{
+    cout << " Enter month (1-12): ";
+    short month = readMonth();
+
+    cout << " Enter income: ";
+    double income = readIncome();
+
+    cout << " Enter expense: ";
+    double expense = readExpense();
+
+    months[monthsAdded].number = month;
+    months[monthsAdded].income = income;
+    months[monthsAdded].expense = expense;
+
+    cout << " Balance for " << monthNames[month - 1] << ": ";
+
+    double balance = income - expense;
+    printBalance(balance, 0);
+    cout << RESET << endl;
+
+    monthsAdded++;
+
+    cout << GREEN << " Data for " << monthNames[month - 1] << " saved successfully." << RESET;
+    cout << endl << endl;
+
+    sortMonths(months, monthsAdded, months, compareByNumberAsc);
 }
 
 void report(Month* months, int &monthsAdded)
@@ -433,7 +434,7 @@ bool executeCommand(char* command, Month* months, int& setupMonths, int& monthsA
     }
     else if (stringStartsWith(command, "forecast"))
     {
-        if (checkParamCommand(command, "forecast", printForecastFormat, FORECAST_ARG_INDEX));
+        if (checkParamCommand(command, "forecast", printForecastFormat, FORECAST_ARG_INDEX))
             forecast(command, months, monthsAdded);
         return true;
     }

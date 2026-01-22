@@ -94,7 +94,7 @@ void displayIncomeChart(Month* months, int& monthsAdded)
 
     if (maxIncome <= 0)
     {
-        cout << "No income data to display." << endl;
+        cout << " No income data to display." << endl;
         return;
     }
 

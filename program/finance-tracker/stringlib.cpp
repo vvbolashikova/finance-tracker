@@ -30,7 +30,8 @@ void printChars(char c, int n)
 
 void trim(char** str, char c)
 {
-    if (!str || !*str) return;
+    if (!str || !*str) 
+        return;
 
     char* s = *str;
 
@@ -87,7 +88,7 @@ char* toLower(char* str)
     int i = 0;
     while (str[i] != '\0')
     {
-        if (str[i] >= 'A' and str[i] <= 'Z')
+        if (str[i] >= 'A' && str[i] <= 'Z')
             str[i] += ASCII_CASE_DIFF;
         i++;
     }
@@ -131,7 +132,6 @@ bool isInteger(char* str)
             return false;
         }   
     }
-
     return true;
 }
 
