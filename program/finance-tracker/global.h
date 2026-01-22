@@ -19,10 +19,4 @@ struct Month {
     short number;
     double income, expense;
 
-    Month()
-    {
-        number = 0;
-        income = 0;
-        expense = 0;
-    }
 };

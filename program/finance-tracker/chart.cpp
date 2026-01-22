@@ -98,6 +98,8 @@ void displayIncomeChart(Month* months, int& monthsAdded)
         return;
     }
 
+    cout << endl;
+
     int targetRows = 6;
     targetRows = clamp(targetRows, MIN_ROWS, MAX_ROWS);
 
