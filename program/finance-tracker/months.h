@@ -25,3 +25,4 @@ double getAverageBalance(Month* months, int& monthsAdded);
 void displayMonthsReport(Month* months, int& monthsAdded);
 void forecastNMonthsAhead(Month* months, int& monthsAdded, int monthsAhead);
 void printMonthsTable(Month* months, int& monthsAdded);
+void printBalance(double balance, int offset);

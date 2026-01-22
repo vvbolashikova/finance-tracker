@@ -49,11 +49,11 @@ void runProgram()
 
         if (isCommandSetup && isSetup)
         {
-            cout << RED << " Session already set up." << RESET << endl;
+            cout << RED << " Session has already been set up." << RESET << endl;
         }
         else if (!isCommandSetup && !isSetup)
         {
-            cout << RED << " Set up session first." << RESET << endl;
+            cout << RED << " Session must be set up first." << RESET << endl;
         }
         else if (!executeCommand(command, months, setupMonths, monthsAdded))
         {

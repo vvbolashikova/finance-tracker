@@ -38,8 +38,6 @@ const MonthComparator comparators[6] = { compareByIncomeDesc, compareByExpenseDe
                                          compareByBalanceDesc, compareByIncomeAsc,
                                          compareByExpenseAsc, compareByBalanceAsc };
 
-typedef void (*FormatFunction)();
-
 void printSortFormat()
 {
     cout << " sort <type> <order>\n";
@@ -59,8 +57,8 @@ void printSearchFormat()
     cout << " where <month> is name or number of the desired month.\n\n";
 }
 
+typedef void (*FormatFunction)();
 const FormatFunction formatFunctions[3] = { printSortFormat, printForecastFormat, printSearchFormat };
-
 
 char* getPureArgument(char* command, int argIndex)
 {
@@ -122,53 +120,16 @@ void displaySubtractionResultWithSign(double num1, double num2)
     cout << num1 - num2;
 }
 
-void setup(int& setupMonths)
+int monthToNumber(char* month)
 {
-    cout << " Enter number of months (1-12): ";
-
-    char input[10];
-    char* arg = input;
-
-    while (true)
+    const char* lowercaseMonths[24] = { "january", "february", "march", "april", "may", "june",
+                                "july", "august", "september", "october", "november", "december" };
+    for (int i = 0; i < 12; i++)
     {
-        cin.getline(input, 10);
-        clearInputStream();
-
-        arg = input;
-        trim(&arg, ' ');
-
-        if (isValidMonthNumber(arg))
-            break;
-
-        cout << RED << " Number of months must be between 1 and 12." << RESET << endl;
-        cout << " Enter number of months (1-12): ";
+        if (strcmp(month, lowercaseMonths[i]) == 0)
+            return i + 1;
     }
-
-    setupMonths = toInteger(arg);
-    cout << YELLOW << " Profile created successfully." << RESET << endl << endl;
-}
-
-int readMonth()
-{
-    char monthStr[10];
-    char* month = monthStr;
-
-    while (true)
-    {
-        cin.getline(monthStr, 10);
-        clearInputStream();
-
-        month = monthStr;
-        trim(&month, ' ');
-
-        if (isValidMonthNumber(month))
-            break;
-
-        cout << RED << " The month must be a number between 1 and 12. " << RESET << endl;
-        cout << " Enter month (1-12): ";
-    }
-
-    return toInteger(month);
+    return 0;
 }
 
 double readIncome()
@@ -217,53 +178,27 @@ double readExpense()
     return toDouble(expense);
 }
 
-void add(Month* months, int& monthsAdded)
+int readMonth()
 {
-    cout << " Enter month (1-12): ";
-    short month = readMonth();
+    char monthStr[10];
+    char* month = monthStr;
 
-    cout << " Enter income: ";
-    double income = readIncome();
-
-    cout << " Enter expense: ";
-    double expense = readExpense();
-
-    months[monthsAdded].number = month;
-    months[monthsAdded].income = income;
-    months[monthsAdded].expense = expense;
-
-    cout << YELLOW << " Balance for " << monthNames[month-1] << ": ";
-    displaySubtractionResultWithSign(income, expense);
-    cout << RESET << endl;
-
-    monthsAdded++;
-
-    cout << YELLOW << " Data for " << monthNames[month - 1] << " has been saved successfully.";
-    cout << RESET << endl << endl;
-
-    sortMonths(months, monthsAdded, months, compareByNumberAsc);
-}
-
-void report(Month* months, int &monthsAdded)
-{
-    displayMonthsReport(months, monthsAdded);
-}
-
-void chart(Month* months, int& monthsAdded)
-{
-    displayIncomeChart(months, monthsAdded);
-}
-
-int monthToNumber(char* month)
-{
-    const char* lowercaseMonths[24] = { "january", "february", "march", "april", "may", "june",
-                                "july", "august", "september", "october", "november", "december" };
-    for (int i = 0; i < 12; i++)
+    while (true)
     {
-        if (strcmp(month, lowercaseMonths[i]) == 0)
-            return i + 1;
+        cin.getline(monthStr, 10);
+        clearInputStream();
+
+        month = monthStr;
+        trim(&month, ' ');
+
+        if (isValidMonthNumber(month))
+            break;
+
+        cout << RED << " The month must be a number between 1 and 12. " << RESET << endl;
+        cout << " Enter month (1-12): ";
     }
-    return 0;
+
+    return toInteger(month);
 }
 
 void searchByMonthName(char* arg, Month* months, int& monthsAdded)
@@ -312,21 +247,67 @@ void searchByMonthNumber(int arg, Month* months, int& monthsAdded)
     }
 }
 
-void forecast(char* command, Month* months, int &monthsAdded)
+void add(Month* months, int& monthsAdded)
 {
-    char* arg = getPureArgument(command, FORECAST_ARG_INDEX);
+    cout << " Enter month (1-12): ";
+    short month = readMonth();
 
-    if (isValidForecastArg(arg))
+    cout << " Enter income: ";
+    double income = readIncome();
+
+    cout << " Enter expense: ";
+    double expense = readExpense();
+
+    months[monthsAdded].number = month;
+    months[monthsAdded].income = income;
+    months[monthsAdded].expense = expense;
+
+    cout << YELLOW << " Balance for " << monthNames[month-1] << ": ";
+    displaySubtractionResultWithSign(income, expense);
+    cout << RESET << endl;
+
+    monthsAdded++;
+
+    cout << YELLOW << " Data for " << monthNames[month - 1] << " has been saved successfully.";
+    cout << RESET << endl << endl;
+
+    sortMonths(months, monthsAdded, months, compareByNumberAsc);
+}
+
+void setup(int& setupMonths)
+{
+    cout << " Enter number of months (1-12): ";
+
+    char input[10];
+    char* arg = input;
+
+    while (true)
     {
-        int monthsAhead = toInteger(arg);
-        forecastNMonthsAhead(months, monthsAdded, monthsAhead);
-    }
-    else
-    {
-        displayInvalidArgMessage("forecast");
+        cin.getline(input, 10);
+        clearInputStream();
+
+        arg = input;
+        trim(&arg, ' ');
+
+        if (isValidMonthNumber(arg))
+            break;
+
+        cout << RED << " Number of months must be between 1 and 12." << RESET << endl;
+        cout << " Enter number of months (1-12): ";
     }
 
-    delete[] arg;
+    setupMonths = toInteger(arg);
+    cout << YELLOW << " Profile created successfully." << RESET << endl << endl;
+}
+
+void report(Month* months, int &monthsAdded)
+{
+    displayMonthsReport(months, monthsAdded);
+}
+
+void chart(Month* months, int& monthsAdded)
+{
+    displayIncomeChart(months, monthsAdded);
 }
 
 void search(char* command, Month* months, int& monthsAdded)
@@ -384,12 +365,27 @@ void sort(char* command, Month* months, int& monthsAdded)
     displayInvalidArgMessage("sort");
 }
 
+void forecast(char* command, Month* months, int& monthsAdded)
+{
+    char* arg = getPureArgument(command, FORECAST_ARG_INDEX);
+
+    if (isValidForecastArg(arg))
+    {
+        int monthsAhead = toInteger(arg);
+        forecastNMonthsAhead(months, monthsAdded, monthsAhead);
+    }
+    else
+    {
+        displayInvalidArgMessage("forecast");
+    }
+
+    delete[] arg;
+}
+
 bool checkParamCommand(char* command, const char* targetCommand, FormatFunction printFunction, int argIndex)
 {
     if (command[argIndex - 1] == ' ')
-    {
         return true;
-    }
     else if (command[argIndex - 1] == '\0')
     {
         cout << " Input does not match expected format of " << targetCommand << ":\n";
@@ -397,6 +393,7 @@ bool checkParamCommand(char* command, const char* targetCommand, FormatFunction 
     }
     else
         cout << RED << " Invalid command (did you mean '" << targetCommand << "'?).\n" << RESET;
+
     return false;
 }
 

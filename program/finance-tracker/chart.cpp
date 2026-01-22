@@ -27,8 +27,10 @@ using std::cout;
 
 int clamp(int rows, int min, int max)
 {
-    if (rows < min) return min;
-    if (rows > max) return max;
+    if (rows < min) 
+        return min;
+    if (rows > max)
+        return max;
     return rows;
 }
 

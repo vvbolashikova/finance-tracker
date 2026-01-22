@@ -30,17 +30,19 @@ double getBalance(Month month)
 {
     return month.income - month.expense;
 }
-
-void displayBalanceWithSign(Month month)
-{
-    if (month.income >= month.expense)
-        cout << '+';
-    cout << getBalance(month);
-}
-
 double getExpenseRatio(Month month)
 {
     return (month.expense / month.income) * 100;
+}
+
+void printBalance(double balance, int offset)
+{
+    if (balance > 0)
+        cout << setw(offset) << GREEN << "+" << balance << RESET;
+    else if (balance == 0)
+        cout << setw(offset) << balance << RESET;
+    else if (balance < 0)
+        cout << setw(offset) << RED << balance << RESET;
 }
 
 void displayMonthInfo(Month month)
@@ -48,10 +50,12 @@ void displayMonthInfo(Month month)
     cout << " Income: " << month.income << endl;
     cout << " Expense: " << month.expense << endl;
 
+    double balance = getBalance(month);
     cout << " Balance: ";
-    displayBalanceWithSign(month);
+    printBalance(balance, 0);
+    cout << endl;
 
-    cout << endl << " Expense Ratio: " << getExpenseRatio(month) << '%' << endl;
+    cout << " Expense Ratio: " << getExpenseRatio(month) << '%' << endl;
 }
 
 double getTotalIncome(Month* months, int& monthsAdded)
@@ -101,9 +105,8 @@ void forecastNMonthsAhead(Month* months, int& monthsAdded, int monthsAhead)
 
     cout << " Current total savings: " << totalBalance << endl;
     cout << " Average monthly change: ";
-    if (averageBalance > 0)
-        cout << '+';
-    cout << averageBalance << endl;
+
+    printBalance(averageBalance, 0);
 
     if (averageBalance >= 0)
     {

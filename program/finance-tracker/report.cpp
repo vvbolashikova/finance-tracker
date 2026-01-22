@@ -59,10 +59,8 @@ void printTableRows(Month* months, int& monthsAdded)
             << setw(MONEY_W) << months[i].income << " | "
             << setw(MONEY_W) << months[i].expense << " | ";
 
-        if (balance >= 0)
-            cout << setw(MONEY_W - 2) << GREEN << '+' << balance << RESET << endl;
-        else
-            cout << setw(MONEY_W - 2) << RED << balance << RESET << endl;
+        printBalance(balance, MONEY_W - 2);
+        cout << endl;
     }
 
     cout << " ";
@@ -92,7 +90,6 @@ void displayMonthsReport(Month* months, int& monthsAdded)
 
     int averageBalance = getAverageBalance(months, monthsAdded);
     cout << " Average Balance: ";
-    if (averageBalance > 0)
-        cout << '+';
-    cout << averageBalance << endl << endl;
+    printBalance(averageBalance, 0);
+    cout << endl << endl;
 }
